@@ -1,0 +1,64 @@
+{
+  "services": [
+    {
+      "name": "Dome",
+      "url": "https://usedo.me",
+      "type": "frontend"
+    },
+    {
+      "name": "Gello",
+      "url": "https://admin.usedo.me",
+      "type": "frontend"
+    },
+    {
+      "name": "Zilch",
+      "url": "https://api.usedo.me/ping",
+      "type": "api"
+    },
+    {
+      "name": "Duran",
+      "url": "https://backups.usedo.me/ping",
+      "type": "api"
+    },
+    {
+      "name": "Yeet",
+      "url": "https://theyeetapp.com/ping",
+      "type": "api"
+    },
+    {
+      "name": "Pluto",
+      "url": "https://blog.olamileke.dev/ping",
+      "type": "api"
+    },
+    {
+      "name": "Noir",
+      "url": "https://noir.olamileke.dev/ping",
+      "type": "api"
+    },
+    {
+      "name": "Crest",
+      "url": "https://crest.olamileke.dev/ping",
+      "type": "api"
+    },
+    {
+      "name": "Notify",
+      "url": "https://notify.olamileke.dev/ping",
+      "type": "api"
+    },
+    {
+      "name": "Cyclone",
+      "url": "https://cyclone.olamileke.dev/ping",
+      "type": "api"
+    },
+    {
+      "name": "Maui",
+      "url": "https://mauii.xyz",
+      "type": "frontend"
+    },
+    {
+      "name": "Maui API",
+      "url": "https://api.mauii.xyz",
+      "type": "api"
+    }
+  ]
+}
