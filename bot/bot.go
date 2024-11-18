@@ -24,7 +24,6 @@ func Init() *tgbotapi.BotAPI {
 	updates := bot.GetUpdatesChan(update)
 
 	for update := range updates {
-		fmt.Printf(update.Message.Text)
 		message := tgbotapi.NewMessage(update.Message.From.ID, "I am very very hungry")
 		message.ReplyToMessageID = update.Message.MessageID
 		bot.Send(message)
