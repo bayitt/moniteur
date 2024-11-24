@@ -1,7 +1,6 @@
 package bot
 
 import (
-	"fmt"
 	"log"
 	"os"
 
@@ -9,7 +8,6 @@ import (
 )
 
 func Init() *tgbotapi.BotAPI {
-	fmt.Print(os.Getenv("BOT_API_TOKEN"))
 	bot, err := tgbotapi.NewBotAPI(os.Getenv("BOT_API_TOKEN"))
 
 	if err != nil {

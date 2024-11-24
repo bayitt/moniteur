@@ -5,13 +5,17 @@ import (
 	"encoding/json"
 	"errors"
 	"fmt"
-	"io/ioutil"
+	"io"
+	"math"
 	"net/http"
 	"os"
 	"path/filepath"
+	"strconv"
 	"strings"
 	"sync"
 	"time"
+
+	tgbotapi "github.com/go-telegram-bot-api/telegram-bot-api/v5"
 )
 
 type Service struct {
@@ -54,10 +58,38 @@ func Monitor() {
 
 	close(serviceChannel)
 
-	for service := range serviceChannel {
-		fmt.Println(service)
+	Alert(serviceChannel)
+}
+
+func Alert(channel <-chan Service) {
+	bot, _ := tgbotapi.NewBotAPI(os.Getenv("BOT_API_TOKEN"))
+	chatId, _ := strconv.Atoi(os.Getenv("TELEGRAM_CHAT_ID"))
+
+	messageText := " "
+
+	for service := range channel {
+		messageText += fmt.Sprintf("%s ", service.Name)
+
+		if service.Active {
+			messageText += "is up! ✅\n"
+		} else {
+			messageText += "is down! ❌\n"
+		}
+
+		messageText += fmt.Sprintf("%s\n", service.Url)
+
+		sslExpiryDays := int64(math.Ceil(service.SslExpiry.Sub(time.Now()).Seconds() / 86400))
+
+		if sslExpiryDays < 0 {
+			messageText += "SSL certificate could not be determined \n\n"
+		} else {
+			messageText += fmt.Sprintf("SSL certificate expires in %d days\n\n", sslExpiryDays)
+		}
 	}
 
+	message := tgbotapi.NewMessage(int64(chatId), messageText)
+
+	bot.Send(message)
 }
 
 func PingService(service Service, wg *sync.WaitGroup, channel chan<- Service) {
@@ -81,7 +113,7 @@ func PingService(service Service, wg *sync.WaitGroup, channel chan<- Service) {
 		return
 	}
 
-	responseBody, _ := ioutil.ReadAll(response.Body)
+	responseBody, _ := io.ReadAll(response.Body)
 
 	if service.ServiceType == "frontend" {
 		service.Active = true
