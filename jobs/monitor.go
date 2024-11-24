@@ -15,11 +15,11 @@ import (
 )
 
 type Service struct {
-	Name        string     `json:"name"`
-	Url         string     `json:"url"`
-	ServiceType string     `json:"type"`
-	Active      *bool      `json:"active"`
-	SslExpiry   *time.Time `json:"ssl_expiry"`
+	Name        string    `json:"name"`
+	Url         string    `json:"url"`
+	ServiceType string    `json:"type"`
+	Active      bool      `json:"active"`
+	SslExpiry   time.Time `json:"ssl_expiry"`
 }
 
 type ServiceData struct {
@@ -38,7 +38,6 @@ func Monitor() {
 	var serviceData *ServiceData
 	json.Unmarshal(serviceContent, &serviceData)
 
-	fmt.Println(serviceData)
 	services := serviceData.Services
 
 	serviceLength := len(services)
@@ -52,39 +51,60 @@ func Monitor() {
 	}
 
 	wg.Wait()
+
+	close(serviceChannel)
+
+	for service := range serviceChannel {
+		fmt.Println(service)
+	}
+
 }
 
 func PingService(service Service, wg *sync.WaitGroup, channel chan<- Service) {
 	defer wg.Done()
 
-	request, _ := http.NewRequest(http.MethodPost, service.Url, nil)
+	var requestUrl string
+
+	if service.ServiceType == "frontend" {
+		requestUrl = service.Url
+	} else {
+		requestUrl = service.Url + "/ping"
+	}
+
+	request, _ := http.NewRequest(http.MethodPost, requestUrl, nil)
 	response, err := http.DefaultClient.Do(request)
 	var pingResponse PingResponse
 
 	if err != nil {
-		*service.Active = false
+		service.Active = false
+		channel <- service
+		return
 	}
 
 	responseBody, _ := ioutil.ReadAll(response.Body)
 
 	if service.ServiceType == "frontend" {
-		*service.Active = true
+		service.Active = true
 	} else {
 		json.Unmarshal(responseBody, &pingResponse)
 
 		if strings.ToLower(pingResponse.Status) == "ok" {
-			*service.Active = true
+			service.Active = true
 		} else {
-			*service.Active = false
+			service.Active = false
 		}
 	}
 
-	sslExpiry, err := CheckSslExpiry(service.Url)
+	sslExpiry, err := CheckSslExpiry(strings.Split(service.Url, "https://")[1])
 
 	if err != nil {
+		channel <- service
+		return
 	}
 
-	service.SslExpiry = &sslExpiry
+	service.SslExpiry = sslExpiry
+
+	channel <- service
 }
 
 func CheckSslExpiry(domain string) (time.Time, error) {

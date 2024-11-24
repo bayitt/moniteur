@@ -12,42 +12,27 @@
     },
     {
       "name": "Zilch",
-      "url": "https://api.usedo.me/ping",
+      "url": "https://api.usedo.me",
       "type": "api"
     },
     {
       "name": "Duran",
-      "url": "https://backups.usedo.me/ping",
+      "url": "https://backups.usedo.me",
       "type": "api"
     },
     {
       "name": "Yeet",
-      "url": "https://theyeetapp.com/ping",
+      "url": "https://theyeetapp.com",
       "type": "api"
     },
     {
       "name": "Pluto",
-      "url": "https://blog.olamileke.dev/ping",
+      "url": "https://blog.olamileke.dev",
       "type": "api"
     },
     {
       "name": "Noir",
-      "url": "https://noir.olamileke.dev/ping",
-      "type": "api"
-    },
-    {
-      "name": "Crest",
-      "url": "https://crest.olamileke.dev/ping",
-      "type": "api"
-    },
-    {
-      "name": "Notify",
-      "url": "https://notify.olamileke.dev/ping",
-      "type": "api"
-    },
-    {
-      "name": "Cyclone",
-      "url": "https://cyclone.olamileke.dev/ping",
+      "url": "https://noir.olamileke.dev",
       "type": "api"
     },
     {
@@ -58,6 +43,21 @@
     {
       "name": "Maui API",
       "url": "https://api.mauii.xyz",
+      "type": "api"
+    },
+    {
+      "name": "Crest",
+      "url": "https://crest.olamileke.dev",
+      "type": "api"
+    },
+    {
+      "name": "Notify",
+      "url": "https://notify.olamileke.dev",
+      "type": "api"
+    },
+    {
+      "name": "Cyclone",
+      "url": "https://cyclone.olamileke.dev",
       "type": "api"
     }
   ]
