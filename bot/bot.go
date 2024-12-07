@@ -16,16 +16,5 @@ func Init() *tgbotapi.BotAPI {
 
 	bot.Debug = true
 
-	update := tgbotapi.NewUpdate(0)
-	update.Timeout = 60
-
-	updates := bot.GetUpdatesChan(update)
-
-	for update := range updates {
-		message := tgbotapi.NewMessage(update.Message.From.ID, "I am very very hungry")
-		message.ReplyToMessageID = update.Message.MessageID
-		bot.Send(message)
-	}
-
 	return bot
 }

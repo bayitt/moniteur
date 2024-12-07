@@ -58,12 +58,23 @@ func Monitor() {
 
 	close(serviceChannel)
 
-	Alert(serviceChannel)
+	Alert(serviceChannel, []int{})
 }
 
-func Alert(channel <-chan Service) {
+func Alert(channel <-chan Service, chatIds []int) {
 	bot, _ := tgbotapi.NewBotAPI(os.Getenv("BOT_API_TOKEN"))
-	chatId, _ := strconv.Atoi(os.Getenv("TELEGRAM_CHAT_ID"))
+	var chatId int
+
+	if len(chatIds) > 0 {
+		fmt.Println("Here are the chatIds")
+		// fmt.Println(chatIds)
+		// chatId = chatIds[0]
+		id, _ := strconv.Atoi(os.Getenv("TELEGRAM_CHAT_ID"))
+		chatId = id
+	} else {
+		id, _ := strconv.Atoi(os.Getenv("TELEGRAM_CHAT_ID"))
+		chatId = id
+	}
 
 	messageText := " "
 
