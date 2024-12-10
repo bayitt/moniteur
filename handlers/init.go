@@ -1,22 +1,56 @@
 package handlers
 
-import tgbotapi "github.com/go-telegram-bot-api/telegram-bot-api/v5"
+import (
+	"fmt"
+	"log"
+	"net/http"
+	"os"
+
+	tgbotapi "github.com/go-telegram-bot-api/telegram-bot-api/v5"
+)
 
 func Init(bot *tgbotapi.BotAPI) {
-	update := tgbotapi.NewUpdate(0)
-	update.Timeout = 60
+	var updates tgbotapi.UpdatesChannel
 
-	updates := bot.GetUpdatesChan(update)
+	fmt.Println(os.Getenv("APP_ENV"))
+
+	if os.Getenv("APP_ENV") != "prod" {
+		update := tgbotapi.NewUpdate(0)
+		update.Timeout = 60
+
+		updates = bot.GetUpdatesChan(update)
+	} else {
+		webhook, _ := tgbotapi.NewWebhookWithCert(os.Getenv("APP_URL")+"/"+bot.Token, tgbotapi.FilePath("cert.pem"))
+
+		_, err := bot.Request(webhook)
+
+		if err != nil {
+			log.Fatal(err)
+		}
+
+		info, err := bot.GetWebhookInfo()
+
+		if err != nil {
+			log.Fatal(err)
+		}
+
+		if info.LastErrorDate != 0 {
+			log.Printf("Telegram callback failed: %s", info.LastErrorMessage)
+		}
+
+		updates = bot.ListenForWebhook("/" + bot.Token)
+		go http.ListenAndServeTLS("0.0.0.0:8443", "cert.pem", "key.pem", nil)
+	}
 
 	for update := range updates {
 		if update.CallbackQuery != nil {
 			Callbacks(bot, update)
-			return
+			continue
 		}
 
 		if update.Message.IsCommand() {
 			Commands(bot, update)
-			return
+			continue
 		}
 
 		message := tgbotapi.NewMessage(update.Message.From.ID, "I am sorry. I do not understand that.")

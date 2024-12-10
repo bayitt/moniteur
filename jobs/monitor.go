@@ -66,11 +66,7 @@ func Alert(channel <-chan Service, chatIds []int) {
 	var chatId int
 
 	if len(chatIds) > 0 {
-		fmt.Println("Here are the chatIds")
-		// fmt.Println(chatIds)
-		// chatId = chatIds[0]
-		id, _ := strconv.Atoi(os.Getenv("TELEGRAM_CHAT_ID"))
-		chatId = id
+		chatId = chatIds[0]
 	} else {
 		id, _ := strconv.Atoi(os.Getenv("TELEGRAM_CHAT_ID"))
 		chatId = id
@@ -82,9 +78,9 @@ func Alert(channel <-chan Service, chatIds []int) {
 		messageText += fmt.Sprintf("%s ", service.Name)
 
 		if service.Active {
-			messageText += "is up! ✅\n"
+			messageText += "is healthy! ✅\n"
 		} else {
-			messageText += "is down! ❌\n"
+			messageText += "has an issue! ❌\n"
 		}
 
 		messageText += fmt.Sprintf("%s\n", service.Url)
