@@ -39,7 +39,7 @@ func Init(bot *tgbotapi.BotAPI) {
 		}
 
 		updates = bot.ListenForWebhook("/" + bot.Token)
-		go http.ListenAndServeTLS("0.0.0.0:8080", "cert.pem", "key.pem", nil)
+		go http.ListenAndServe("0.0.0.0:8080", nil)
 	}
 
 	for update := range updates {
