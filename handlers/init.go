@@ -20,7 +20,8 @@ func Init(bot *tgbotapi.BotAPI) {
 
 		updates = bot.GetUpdatesChan(update)
 	} else {
-		webhook, _ := tgbotapi.NewWebhookWithCert(os.Getenv("APP_URL")+"/"+bot.Token, tgbotapi.FilePath("cert.pem"))
+		port := os.Getenv("APP_PORT")
+		webhook, _ := tgbotapi.NewWebhookWithCert(fmt.Sprintf("%s:%s/%s", os.Getenv("APP_URL"), port, bot.Token), tgbotapi.FilePath("cert.pem"))
 
 		_, err := bot.Request(webhook)
 
@@ -39,7 +40,7 @@ func Init(bot *tgbotapi.BotAPI) {
 		}
 
 		updates = bot.ListenForWebhook("/" + bot.Token)
-		go http.ListenAndServe("0.0.0.0:8080", nil)
+		go http.ListenAndServe(fmt.Sprintf("0.0.0.0:%s", port), nil)
 	}
 
 	for update := range updates {
