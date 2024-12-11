@@ -10,6 +10,6 @@ RUN go mod download
 
 RUN go build -o ./moniteur
 
-EXPOSE 8080
+EXPOSE 443
 
 CMD ["./moniteur"]
