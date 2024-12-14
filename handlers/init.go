@@ -14,7 +14,7 @@ func Init(bot *tgbotapi.BotAPI) {
 
 	fmt.Println(os.Getenv("APP_ENV"))
 
-	if os.Getenv("APP_ENV") != "prod" {
+	if os.Getenv("APP_ENV") != "production" {
 		update := tgbotapi.NewUpdate(0)
 		update.Timeout = 60
 

@@ -18,7 +18,7 @@ func main() {
 		log.Panic(err)
 	}
 
-	_, jobErr := scheduler.NewJob(gocron.DailyJob(1, gocron.NewAtTimes(gocron.NewAtTime(10, 0, 0))), gocron.NewTask(jobs.Monitor))
+	_, jobErr := scheduler.NewJob(gocron.DailyJob(1, gocron.NewAtTimes(gocron.NewAtTime(9, 0, 0))), gocron.NewTask(jobs.Monitor))
 
 	if jobErr != nil {
 		log.Panic(err)

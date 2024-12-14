@@ -16,6 +16,7 @@ import (
 	"time"
 
 	tgbotapi "github.com/go-telegram-bot-api/telegram-bot-api/v5"
+	"golang.org/x/exp/maps"
 )
 
 type Service struct {
@@ -112,7 +113,7 @@ func PingService(service Service, wg *sync.WaitGroup, channel chan<- Service) {
 
 	request, _ := http.NewRequest(http.MethodPost, requestUrl, nil)
 	response, err := http.DefaultClient.Do(request)
-	var pingResponse PingResponse
+	var pingResponse map[string]string
 
 	if err != nil {
 		service.Active = false
@@ -126,11 +127,13 @@ func PingService(service Service, wg *sync.WaitGroup, channel chan<- Service) {
 		service.Active = true
 	} else {
 		json.Unmarshal(responseBody, &pingResponse)
+		service.Active = true
 
-		if strings.ToLower(pingResponse.Status) == "ok" {
-			service.Active = true
-		} else {
-			service.Active = false
+		for _, status := range maps.Values(pingResponse) {
+			if strings.ToLower(status) != "healthy" {
+				service.Active = false
+				continue
+			}
 		}
 	}
 
