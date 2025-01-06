@@ -3,62 +3,74 @@
     {
       "name": "Dome",
       "url": "https://usedo.me",
-      "type": "frontend"
+      "type": "frontend",
+      "app": "Dome"
     },
     {
       "name": "Gello",
-      "url": "https://admin.usedo.me",
-      "type": "frontend"
+      "url": "https://app.usedo.me",
+      "type": "frontend",
+      "app": "Dome"
     },
     {
       "name": "Zilch",
       "url": "https://api.usedo.me",
-      "type": "api"
+      "type": "api",
+      "app": "Dome"
     },
     {
       "name": "Duran",
       "url": "https://backups.usedo.me",
-      "type": "api"
+      "type": "api",
+      "app": "Dome"
     },
     {
       "name": "Yeet",
       "url": "https://theyeetapp.com",
-      "type": "api"
+      "type": "api",
+      "app": "Yeet"
     },
     {
       "name": "Pluto",
       "url": "https://blog.olamileke.dev",
-      "type": "api"
+      "type": "api",
+      "app": "Olamileke"
     },
     {
       "name": "Noir",
       "url": "https://api.olamileke.dev",
-      "type": "api"
+      "type": "api",
+      "app": "Olamileke"
     },
     {
       "name": "Maui",
       "url": "https://mauii.xyz",
-      "type": "frontend"
+      "type": "frontend",
+      "app": "Maui"
     },
     {
       "name": "Maui API",
       "url": "https://api.mauii.xyz",
-      "type": "api"
+      "type": "api",
+      "app": "Maui"
     },
     {
       "name": "Crest",
       "url": "https://to.olamileke.dev",
-      "type": "api"
+      "type": "api",
+      "app": "Olamileke"
     },
     {
       "name": "Notify",
       "url": "https://notify.olamileke.dev",
-      "type": "api"
+      "type": "api",
+      "app": "Olamileke"
     },
     {
       "name": "Cyclone",
       "url": "https://cyclone.olamileke.dev",
-      "type": "api"
+      "type": "api",
+      "app": "Olamileke"
     }
   ]
 }
