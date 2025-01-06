@@ -25,6 +25,7 @@ type Service struct {
 	ServiceType string    `json:"type"`
 	Active      bool      `json:"active"`
 	SslExpiry   time.Time `json:"ssl_expiry"`
+	App         string    `json:"app"`
 }
 
 type ServiceData struct {
@@ -104,14 +105,17 @@ func PingService(service Service, wg *sync.WaitGroup, channel chan<- Service) {
 	defer wg.Done()
 
 	var requestUrl string
+	var requestMethod string
 
 	if service.ServiceType == "frontend" {
 		requestUrl = service.Url
+		requestMethod = "GET"
 	} else {
 		requestUrl = service.Url + "/ping"
+		requestMethod = "POST"
 	}
 
-	request, _ := http.NewRequest(http.MethodPost, requestUrl, nil)
+	request, _ := http.NewRequest(requestMethod, requestUrl, nil)
 	response, err := http.DefaultClient.Do(request)
 	var pingResponse map[string]string
 
@@ -125,14 +129,25 @@ func PingService(service Service, wg *sync.WaitGroup, channel chan<- Service) {
 
 	if service.ServiceType == "frontend" {
 		service.Active = true
+		pageContent := strings.ToLower(string(responseBody))
+
+		if strings.Contains(pageContent, strings.ToLower(service.App)) {
+			service.Active = true
+		} else {
+			service.Active = false
+		}
 	} else {
 		json.Unmarshal(responseBody, &pingResponse)
 		service.Active = true
 
-		for _, status := range maps.Values(pingResponse) {
-			if strings.ToLower(status) != "healthy" {
-				service.Active = false
-				continue
+		if len(pingResponse) == 0 {
+			service.Active = false
+		} else {
+			for _, status := range maps.Values(pingResponse) {
+				if strings.ToLower(status) != "healthy" {
+					service.Active = false
+					continue
+				}
 			}
 		}
 	}
